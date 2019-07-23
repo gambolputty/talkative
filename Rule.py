@@ -38,7 +38,7 @@ class Rule:
         result = []
         for match in re.finditer(r'(?:#([^.#]+)(?:\.([^#]+))?#)', self.text):
             node = {
-                'text': match.group(1),
+                'key': match.group(1),
                 'modifiers': None
             }
             if match.group(1) is None:
