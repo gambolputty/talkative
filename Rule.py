@@ -4,10 +4,11 @@ class Rule:
     def __init__(self, index, rule):
         self.index = index
         self.is_touched = False
-        
-        # set text and frequency
         self.text = ''
         self.frequency = [1]
+        self.nodes = []
+        
+        # set text and frequency
         if isinstance(rule, str):
             self.text = rule
         elif isinstance(rule, list):
