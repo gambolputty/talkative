@@ -38,9 +38,9 @@ class Symbol:
 
 
     def select_rule(self):
-        result = None
+        found_rule = None
         if self.method == 'rand':
-            result = random.choice(self.rules)
+            found_rule = random.choice(self.rules)
         elif self.method == 'freq':
             # filter rules
             # n % k == 0
@@ -50,26 +50,27 @@ class Symbol:
             rules_filtered = [r for r in self.rules if any(next_step % divider == 0 for divider in r.frequency)]
             rules_count = len(rules_filtered)
             if rules_count == 1:
-                result = rules_filtered[0]
+                found_rule = rules_filtered[0]
             elif rules_count > 1:
                 # sort
                 # hightest divider at the bottom
                 rules_sorted = sorted(rules_filtered, key=lambda x: x.frequency)
                 # pick last rule (with highest divider)
-                result = rules_sorted[-1]
+                found_rule = rules_sorted[-1]
             else:
                 raise ValueError(f'No rule found for frequency "{next_step}" in "{self.key}"')
         elif self.method == 'uniq':
             # find next unique rule
             for rule in self.rules:
                 if rule.index not in self.history:
-                    result = rule
+                    found_rule = rule
                     break
             else:
                 raise ValueError(f'No unique rule found in "{self.key}" (all used)')
         
-        # add to history ?
+        # add to history
+        self.history.append(found_rule.index)
 
         # return
-        return result
+        return found_rule
 

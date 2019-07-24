@@ -1,14 +1,17 @@
 from pdb import set_trace as bp
 from pprint import pprint
-from Grammar import Grammar
+from Story import Story
+
+with open('material/zu.txt', 'r', encoding='utf-8') as f:
+    adjectives = f.read().split('\n')
 
 grammar = {
     'origin': {
         'rules': [
-            'Es #es-ist# #viel# zu #zu-adjektiv.Upper# und #zudem# #viel# zu #zu-adjektiv#',
-            'Es #es-ist# zu #zu-adjektiv#, zu #zu-adjektiv# und #zudem# zu #zu-adjektiv#',
-            'Es #es-ist# #zudem# #viel# zu #zu-adjektiv#',
-            'Zu #zu-adjektiv#, zu #zu-adjektiv#, zu #zu-adjektiv#',
+            'Es #es-ist# #viel# zu #adjektiv.Upper# und #zudem# #viel# zu #adjektiv#',
+            'Es #es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#',
+            'Es #es-ist# #zudem# #viel# zu #adjektiv#',
+            'Zu #adjektiv#, zu #adjektiv#, zu #adjektiv#',
         ]
     },
     'es-ist': {
@@ -45,23 +48,14 @@ grammar = {
             ['enorm']
         ]
     },
-    'zu-adjektiv': {
+    'adjektiv': {
         'method': 'uniq',
-        'rules': [
-            'zu abartig',
-            'zu abenteuerlich',
-            'zu abergläubisch',
-            'zu abfällig',
-            'zu abhängig',
-            'zu abrupt',
-            'zu abscheulich',
-            'zu abseitig',
-            'zu abstoßend'
-        ]
+        'rules': adjectives
     }
 }
 
-new_story = Grammar(grammar)
-for step in range(1, 50):
+new_story = Story(grammar)
+for step in range(0, 3):
     # print(f'Step {step}')
-    new_story.flatten()
+    text = new_story.tell()
+    print(text)

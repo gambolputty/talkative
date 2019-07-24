@@ -37,14 +37,21 @@ class Rule:
     def parse_nodes(self):
         result = []
         for match in re.finditer(r'(?:#([^.#]+)(?:\.([^#]+))?#)', self.text):
-            node = {
-                'key': match.group(1),
-                'modifiers': None
-            }
-            if match.group(1) is None:
+            key = match.group(1)
+            modifiers = match.group(2).split('.') if match.group(2) is not None else None
+            if key is None:
                 raise ValueError(f'Something is wrong with the nodes found in rule {self.text}')
-            if match.group(2) is not None:
-                node['modifiers'] = match.group(2).split('.')
-            result.append(node)
-
+            result.append(Node(key, modifiers))
         self.nodes = result
+
+
+    def expand(self, ):
+        return self.text
+
+
+class Node:
+    key = ''
+    modifiers = None
+    def __init__(self, key, modifiers):
+        self.key = key
+        self.modifiers = modifiers
