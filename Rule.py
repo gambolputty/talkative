@@ -3,31 +3,34 @@ import re
 class Rule:
     def __init__(self, index, rule):
         self.index = index
+        self.is_touched = False
         
         # set text and frequency
         self.text = ''
         self.frequency = [1]
         if isinstance(rule, str):
-            if rule.strip() == '':
-                raise ValueError('Empty rule text')
             self.text = rule
         elif isinstance(rule, list):
             rule_size = len(rule)
-            if rule_size == 1:
-                self.text = rule[0]
-            elif rule_size > 1:
-                # check if rule has valid frequency dividers from 1 - X
-                if not all(isinstance(d, int) and d >= 1 for d in rule[1:]):
-                    raise ValueError(f'Rule with invalid divider (must be a number > 1): {rule}')
-                self.text = rule[0]
-                self.frequency = rule[1:]
-            elif rule_size == 0:
-                raise ValueError(f'Empty rule')
+            if rule_size == 0:
+                raise ValueError(f'Empty rule found')
+
+            # check if rule has valid frequency dividers from 1 - X
+            if not all(isinstance(d, int) and d >= 1 for d in rule[1:]):
+                raise ValueError(f'Rule with invalid divider (must be a number > 1): {rule}')
+
+            # check rule text type
+            if not isinstance(rule[0], str):
+                raise ValueError(f'Rule text is not of type "string" (is {type(rule[0])})')
+
+            self.text = rule[0]
+            self.frequency = rule[1:]            
         else:
             raise ValueError(f'Wrong rule format "{rule}"')
 
-        # parse nodes
-        self.nodes = self.parse_nodes()
+        # parse nodes only if rule text not empty
+        if self.text.strip():
+            self.nodes = self.parse_nodes()
 
     
     def parse_nodes(self):
@@ -51,8 +54,22 @@ class Rule:
 
 
     def flatten(self, state):
-        # copy
-        return self.text
+        text = ''
+        self.is_touched = True
+
+        # loop nodes, check for expandable
+        for node in self.nodes:
+            if node.type == 0:
+                text += node.text
+            elif node.type == 1:
+                # pick rules from state
+                try:
+                    rule = next(r for r in state[node.text] if r.is_touched is False)
+                    text += rule.flatten(state)
+                except StopIteration:
+                    raise ValueError(f'No next rule found in state for node "{node.text}", type {node.type}')
+
+        return text
 
 
 class Node:
@@ -61,7 +78,7 @@ class Node:
     0: Plain text
     1: Tag (e. g. #adjective.mod.mod#)
     """
-    def __init__(self, type, text, span, mod=None):
+    def __init__(self, type, text=None, span=None, mod=None):
         self.type = type
         self.text = text
         self.span = span
