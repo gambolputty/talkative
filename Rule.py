@@ -1,16 +1,12 @@
 import re
 
 class Rule:
-    index = -1
-    text = ''
-    frequency = [1]
-    nodes = []
-
     def __init__(self, index, rule):
-        # set index
         self.index = index
         
         # set text and frequency
+        self.text = ''
+        self.frequency = [1]
         if isinstance(rule, str):
             if rule.strip() == '':
                 raise ValueError('Empty rule text')
@@ -31,27 +27,42 @@ class Rule:
             raise ValueError(f'Wrong rule format "{rule}"')
 
         # parse nodes
-        self.parse_nodes()
+        self.nodes = self.parse_nodes()
 
     
     def parse_nodes(self):
         result = []
-        for match in re.finditer(r'(?:#([^.#]+)(?:\.([^#]+))?#)', self.text):
-            key = match.group(1)
-            modifiers = match.group(2).split('.') if match.group(2) is not None else None
-            if key is None:
+        match_iter = re.finditer(r'(?P<text>[^#]+)|(?:#(?P<tag>[^.#]+)(?:\.(?P<mod>[^#]+))?#)', self.text)
+        for match in match_iter:
+            node = None
+            if match.group('text'):
+                node = Node(type=0, text=match.group('text'), span=match.span('text'))
+            elif match.group('tag'):
+                node = Node(type=1, text=match.group('tag'), span=match.span('tag'))
+                if match.group('mod'):
+                    node.mod = match.group('mod').split('.')
+
+            if node is None:
                 raise ValueError(f'Something is wrong with the nodes found in rule {self.text}')
-            result.append(Node(key, modifiers))
-        self.nodes = result
+
+            result.append(node)
+
+        return result
 
 
-    def expand(self, ):
+    def flatten(self, state):
+        # copy
         return self.text
 
 
 class Node:
-    key = ''
-    modifiers = None
-    def __init__(self, key, modifiers):
-        self.key = key
-        self.modifiers = modifiers
+    """
+    Types of nodes:
+    0: Plain text
+    1: Tag (e. g. #adjective.mod.mod#)
+    """
+    def __init__(self, type, text, span, mod=None):
+        self.type = type
+        self.text = text
+        self.span = span
+        self.mod = mod

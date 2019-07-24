@@ -10,7 +10,7 @@
       "request": "launch",
       // "program": "${file}",
       "program": "${workspaceFolder}/test.py",
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     }
   ]
 }

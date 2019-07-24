@@ -3,53 +3,43 @@ from functools import reduce
 from Symbol import Symbol
 
 class Story:
-    grammar = {}
-    state = defaultdict(dict)
-    text = ''
-
     def __init__(self, grammar):
         self.grammar = {k: Symbol(k, v) for k, v in grammar.items()}
+        self.state = defaultdict(list)
+        self.text = ''
 
 
     def tell(self):
         self.clear_state()
-        self.recursive('origin')
-        self.generate_text()
+        self.build_state('origin')
+        # self.build_text('origin')
     
 
-    def generate_text(self):
-        trash = []
-        # for key, rules in self.state.items():
-        #     for rule in rules:
-        #         # check nodes of rule
-        #         node_keys = [n.key for n in rule.nodes]
-        #         # get rules from state
-        #         wanted_rules = {k: [r for r in self.state[k] if r not in trash] for k in node_keys}
-        #         print(rule.text)
-        #         print(wanted_rules)
-        #         print()
-        
+    def build_text(self, key='origin'):
+        for rule in self.state[key]:
+            # append to text
+            self.text += rule.flatten(self.state) + '\n'
+
+            # check tags in rule
+            if len(rule.nodes) > 0:
+                for node in rule.nodes:
+                    self.build_text(node.key)
+
 
     def clear_state(self):
         self.state.clear()
 
 
-    def get_nested_value(d, path=('origin')):
-        return reduce(dict.get, path, d)
-
-
-    def recursive(self, key='origin', path=('origin')):
+    def build_state(self, key='origin'):
         # pick rule
         rule = self.grammar[key].select_rule()
 
         # save to state
-        nested_dict = get_nested_value(self.state, path)
         self.state[key].append(rule)
         
-        # check nodes in rule
-        if len(rule.nodes) > 0:
-            for node in rule.nodes:
-                self.recursive(node.key, (key, node.key))
+        # check for expandable nodes in rule
+        for node in [n for n in rule.nodes if n.type == 1]:
+            self.build_state(node.text)
 
         # # handle None
         # # rule_text can be none

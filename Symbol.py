@@ -4,15 +4,9 @@ import random
 from Rule import Rule
 
 class Symbol:
-    key = ''
-    method = 'rand'  # method to select rules (rand, freq, uniq)
-    rules = []
-    history = []
-
-
     def __init__(self, key, options):
-        # set key
-        self.key = key
+        self.key = key        
+        self.history = []
 
         # options can be a list (of rules) or a dict
         # set list of rules to parse
@@ -26,6 +20,7 @@ class Symbol:
             raise ValueError(f'Wrong grammar format for "{key}"')
 
         # set method
+        self.method = 'rand'  # method to select rules (rand, freq, uniq)
         if options_type == 'dict' and 'method' in options:
             # check provided method
             method = options['method']
