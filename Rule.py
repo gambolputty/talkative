@@ -1,16 +1,18 @@
 import re
+from Node import Node
+
 
 class Rule:
     def __init__(self, index, rule):
         self.index = index
         self.is_touched = False
-        self.text = ''
+        self.raw = ''
         self.frequency = [1]
         self.nodes = []
         
         # set text and frequency
         if isinstance(rule, str):
-            self.text = rule
+            self.raw = rule
         elif isinstance(rule, list):
             rule_size = len(rule)
             if rule_size == 0:
@@ -24,30 +26,34 @@ class Rule:
             if not isinstance(rule[0], str):
                 raise ValueError(f'Rule text is not of type "string" (is {type(rule[0])})')
 
-            self.text = rule[0]
+            self.raw = rule[0]
             self.frequency = rule[1:]            
         else:
             raise ValueError(f'Wrong rule format "{rule}"')
 
         # parse nodes only if rule text not empty
-        if self.text.strip():
-            self.nodes = self.parse_nodes()
+        self.nodes = self.parse_nodes()
 
     
     def parse_nodes(self):
         result = []
-        match_iter = re.finditer(r'(?P<text>[^#]+)|(?:#(?P<tag>[^.#]+)(?:\.(?P<mod>[^#]+))?#)', self.text)
+
+        # handle empty rule text
+        # useful for skipping 
+        if self.raw.strip() == '':
+            return [Node(type=0, text=self.raw)]
+
+        match_iter = re.finditer(r'(?P<text>[^#]+)|(?:#(?P<tag>[^.#]+)(?:\.(?P<mod>[^#]+))?#)', self.raw)
         for match in match_iter:
             node = None
             if match.group('text'):
-                node = Node(type=0, text=match.group('text'), span=match.span('text'))
+                node = Node(type=0, text=match.group('text'))
             elif match.group('tag'):
-                node = Node(type=1, text=match.group('tag'), span=match.span('tag'))
+                node = Node(type=1, text=match.group('tag'))
                 if match.group('mod'):
                     node.mod = match.group('mod').split('.')
-
             if node is None:
-                raise ValueError(f'Something is wrong with the nodes found in rule {self.text}')
+                raise ValueError(f'Something is wrong with the nodes found in rule {self.raw}')
 
             result.append(node)
 
@@ -55,32 +61,20 @@ class Rule:
 
 
     def flatten(self, state):
-        text = ''
+        text_list = []
         self.is_touched = True
 
         # loop nodes, check for expandable
         for node in self.nodes:
             if node.type == 0:
-                text += node.text
+                text_list.append(node.text)
             elif node.type == 1:
-                # pick rules from state
-                try:
-                    rule = next(r for r in state[node.text] if r.is_touched is False)
-                    text += rule.flatten(state)
-                except StopIteration:
+                # pick rule from state for node
+                rule = next((r for r in state[node.text] if r.is_touched is False), False)
+                if rule is False:
                     raise ValueError(f'No next rule found in state for node "{node.text}", type {node.type}')
 
-        return text
+                # expand rule
+                text_list.extend(rule.flatten(state))
 
-
-class Node:
-    """
-    Types of nodes:
-    0: Plain text
-    1: Tag (e. g. #adjective.mod.mod#)
-    """
-    def __init__(self, type, text=None, span=None, mod=None):
-        self.type = type
-        self.text = text
-        self.span = span
-        self.mod = mod
+        return text_list

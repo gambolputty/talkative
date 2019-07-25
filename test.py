@@ -3,15 +3,16 @@ from pprint import pprint
 from random import shuffle
 from Story import Story
 
+
 with open('material/zu.txt', 'r', encoding='utf-8') as f:
     adjectives = f.read().split('\n')
 shuffle(adjectives)
 
 grammar = {
     'origin': [
-        'Es #es-ist# #viel# zu #adjektiv.Upper# und #zudem# #viel# zu #adjektiv#',
-        # 'Es #es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#',
-        # 'Es #es-ist# #zudem# #viel# zu #adjektiv#',
+        '#es-ist# #viel# zu #adjektiv.Upper# und #zudem# #viel# zu #adjektiv#',
+        # '#es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#',
+        # '#es-ist# #zudem# #viel# zu #adjektiv#',
         # 'Zu #adjektiv#, zu #adjektiv#, zu #adjektiv#',
     ],
     'es-ist': {
@@ -25,19 +26,19 @@ grammar = {
     'viel': {
         'method': 'freq',
         'rules': [
+            ['viel', 1],
+            ['häufig', 1],
+            ['weitaus', 1],
+            ['wiederholt', 1],
+            ['generell', 1],
+            ['oft', 1],
+            ['sehr oft', 1],
+            ['manchmal', 1],
+            ['x-fach', 1],
+            ['immer wieder', 1],
+            ['etliche mal', 1],
+            ['enorm', 1],
             ['', 1],
-            ['viel', 2],
-            ['häufig', 2],
-            ['weitaus', 2],
-            ['wiederholt', 2],
-            ['generell', 2],
-            ['oft', 2],
-            ['sehr oft', 2],
-            ['manchmal', 2],
-            ['x-fach', 2],
-            ['immer wieder', 2],
-            ['etliche mal', 2],
-            ['enorm', 2],
         ]
     },
     'zudem': [

@@ -3,10 +3,32 @@ from pprint import pprint
 import random
 from Rule import Rule
 
+
 class Symbol:
+    """
+    method:
+        rand (default):
+            Select a random rule from the list.
+
+        freq:
+            Select an rule whose frequency value is divisible by the number
+            of all previous occurrences of the rule ("history"). If multiple rules
+            with the same frequency value are found, select a random rule.
+
+        uniq:
+            Force the selection of unique rules (rules not in "history" yet).
+            Rules are selected in linear order.
+            Will throw an error if no new rule is found.
+
+     ignore_history: False
+        
+        
+    """
     def __init__(self, key, options):
         self.key = key        
         self.history = []
+        self.method = 'rand'
+        self.rules = []
 
         # options can be a list (of rules) or a dict
         # set list of rules to parse
@@ -20,7 +42,6 @@ class Symbol:
             raise ValueError(f'Wrong grammar format for "{key}"')
 
         # set method
-        self.method = 'rand'  # method to select rules (rand, freq, uniq)
         if options_type == 'dict' and 'method' in options:
             # check provided method
             method = options['method']
