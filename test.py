@@ -9,18 +9,21 @@ with open('material/zu.txt', 'r', encoding='utf-8') as f:
 shuffle(adjectives)
 
 grammar = {
-    'origin': [
-        '#es-ist# #viel# zu #adjektiv# #continue#',
-        '#zudem# #ist-es# #viel# zu #adjektiv# #continue#',
-        # '#es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#',
-        # '#es-ist# #zudem# #viel# zu #adjektiv#',
-        # 'Zu #adjektiv#, zu #adjektiv#, zu #adjektiv#',
-    ],
+    'origin': {
+        'method': 'freq',
+        'rules': [
+            ['#es-ist# #steigerung1# zu #adjektiv#', 1],
+            ['#es-ist# #zudem# #steigerung1# zu #adjektiv# #continue#', 3],
+            ['#zudem# #ist-es# #steigerung1# zu #adjektiv# #continue#', 4],
+            ['#es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#', 5],
+            ['Zu #adjektiv#, zu #adjektiv#, zu #adjektiv# #continue#', 7],
+        ]
+    },
     'continue': {
         'method': 'freq',
         'rules': [
             ['', 1],
-            ['und #zudem# #viel# zu #adjektiv#', 3]
+            ['und #zudem# #steigerung1# zu #adjektiv#', 3]
         ]
     },
     'es-ist': {
@@ -32,38 +35,58 @@ grammar = {
         ]
     },
     'ist-es': [
-        'ist es'
+        ['ist es', 1],
+        ['erscheint es mir', 7],
+        ['finde ich es', 5]
     ],
-    'viel': {
+
+    # Steigerung des Komparativs
+    'steigerung1': {
         'method': 'freq',
         'rules': [
             ['', 1],
             ['viel', 3],
+            ['deutlich', 4],
+            # ['erheblich', 4],
+            ['wesentlich', 4],
+            ['vielfach', 4],
+            ['weitgehend', 4],
             ['weitaus', 4],
-            ['enorm', 5],
-            ['x-fach', 7],
+            ['sehr viel', 8],
+            ['immens', 7],
+            ['allerhand', 7],
+            ['eine gehörige Portion', 8],
+            ['x-fach', 10],
         ]
     },
+    
+    # https://de.wiktionary.org/wiki/sehr
+    'steigerung2': [
+        'sehr', 
+        'enorm'
+        # ganz, recht, schwer, ausgesprochen,
+        # äußerst, mordsmäßig, unheimlich, wahnsinnig
+        # mächtig, tüchtig
+    ],
     'zudem': [
         'im Allgemeinen',
         'im Wesentlichen',
         'in erster Linie',
         'im Speziellen', 
-        # gemeinhin, gewöhnlich, im Regelfall, in der Regel, meist, meistens, normalerweise, zumeist
+        'allgemein',
         'von wenigen Ausnahmen abgesehen',
-        # wenn man spezielle Einzelfälle außer Acht lässt
-        'weitgehend',
         'im Großen und Ganzen',
-        # insgesamt betrachtet, allgemein
+        'insgesamt betrachtet',
         'darüber hinaus',
         'des Wei­te­ren',
+        'im Weiteren',
         'ganz sicher',
         'auf jeden Fall',
-        # 'jedenfalls',
         'zudem',
-        # hinzu kommt ...
         'außerdem',
-        # überdies, zudem, ferner, nebenher, nebenbei, des Weiteren, weiterführend, im Weiteren, in der weiteren Folge, darüber hinaus, auch, zusätzlich
+        'auch',
+        'zusätzlich',
+        'nebenbei',
         'häufig',
         'wiederholt',
         'generell',
@@ -72,6 +95,11 @@ grammar = {
         'manchmal',
         'immer wieder',
         'etliche male',
+        # gemeinhin, gewöhnlich, im Regelfall, in der Regel, meist, meistens, normalerweise, zumeist
+        # wenn man spezielle Einzelfälle außer Acht lässt
+        # 'jedenfalls',
+        # hinzu kommt ...
+        # überdies, ferner, nebenher, in der weiteren Folge
         
     ],
     'adjektiv': {
@@ -81,7 +109,7 @@ grammar = {
 }
 
 new_story = Story(grammar)
-for step in range(0, 20):
+for step in range(0, 50):
     # print(f'Step {step}')
     new_story.tell()
 

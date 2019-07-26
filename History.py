@@ -19,7 +19,7 @@ class History:
         result = []
         steps_count = len(self.steps)
 
-        if steps_count == 0 or self.rules_count == 1:
+        if steps_count == 0:
             return result
         
         if self.rules_count <= 2:

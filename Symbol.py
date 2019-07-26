@@ -94,6 +94,9 @@ class Symbol:
 
 
     def select_rule_random(self):
+        if len(self.rules) == 1:
+            return self.rules[0]
+        
         # get indexes to exclude for next selection
         indexes_to_exlude = self.history.recently_used_steps
         if indexes_to_exlude:
@@ -134,6 +137,7 @@ class Symbol:
             return random.choice(rule_candidates)            
 
         return wanted_rule
+
 
     def select_rule_uniq(self):
         # find next unique rule
