@@ -30,13 +30,13 @@ grammar = {
         'method': 'freq',
         'rules': [
             ['es ist', 1],
-            ['es erscheint mir', 7],
+            ['es erscheint mir', 10],
             ['ich finde es', 5]
         ]
     },
     'ist-es': [
         ['ist es', 1],
-        ['erscheint es mir', 7],
+        ['erscheint es mir', 10],
         ['finde ich es', 5]
     ],
 
@@ -94,7 +94,8 @@ grammar = {
         'sehr oft',
         'manchmal',
         'immer wieder',
-        'etliche male',
+
+        # 'etliche male',
         # gemeinhin, gewöhnlich, im Regelfall, in der Regel, meist, meistens, normalerweise, zumeist
         # wenn man spezielle Einzelfälle außer Acht lässt
         # 'jedenfalls',
