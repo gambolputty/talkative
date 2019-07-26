@@ -1307,13 +1307,16 @@ abfallend
 abgeklärt
 abgemagert
 abgenutzt
+abgeschmackt
 abgeschrägt
 abgespannt
+abgründig
 abschreckend
 abschüssig
 abseits
 absichtlich
 absonderlich
+abwartend
 abwehrend
 abweisend
 achtlos
@@ -1346,6 +1349,7 @@ ansteckend
 ansteigend
 antiquiert
 anzüglich
+apart
 apathisch
 aphoristisch
 arbeitswütig
@@ -1355,11 +1359,13 @@ aristokratisch
 artig
 asketisch
 ätherisch
+atmend
 ätzend
 aufblitzend
 auffallend schön
 aufgeweckt
 aufgeweicht
+auflehnend
 aufmunternd
 aufopfernd
 aufrecht
@@ -1393,7 +1399,9 @@ beengt
 befreit
 befremdlich
 begehrenswert
+beglückt
 begreifend
+beharrend
 beharrlich
 behutsam
 behutsam kritisch
@@ -1404,8 +1412,10 @@ beklemmend
 bekümmert
 belanglos
 belastet
+belebend
 belebt
 belehrend
+beleibt
 beleidigend
 beleidigt
 bemerkbar
@@ -1420,6 +1430,7 @@ beschwingt
 beschwörend
 besinnungslos
 besorgniserregend
+bestechend
 bestialisch
 bestimmt deutlich
 bestimmt deutlich gedacht
@@ -1444,6 +1455,7 @@ blitzartig
 blitzblank
 blödsinnig
 blumenhaft
+blumenreich
 blutdürstig
 bockig
 bohrend
@@ -1524,6 +1536,8 @@ eigensinnig
 eigentümlich
 einbrechend
 eindringlich
+einend
+einförmig
 eingebildet
 eingehend
 einnehmend
@@ -1653,6 +1667,7 @@ frech
 frech höhnisch
 frei denkend
 frei gedacht
+freigiebig
 freiliegend
 freimütig
 freudig
@@ -1687,6 +1702,7 @@ fürstlich
 gaffend
 gährend
 galant
+garstig
 gastfreundlich
 gebannt
 gebeugt
@@ -1709,6 +1725,7 @@ geflüstert
 gefräßig
 gefühllos
 gefühlvoll
+gefüllt
 gegliedert
 geheimnißvoll
 geil
@@ -1856,6 +1873,7 @@ hervorstechend
 herzensgut
 herzenslieb
 herzlos
+heuchlerisch
 hilflos
 hilfsbedürftig
 hilfsbereit
@@ -1870,6 +1888,7 @@ hoch sitzend
 hochdeutsch
 hochnäsig
 hochtrabend
+hoffnungsfroh
 hoffnungslos
 hoffnungsvoll
 hohl
@@ -1881,6 +1900,7 @@ hüpfend
 huschend
 hütend
 ichsüchtig
+ideell
 idiotisch
 impotent
 inaktiv
@@ -1916,6 +1936,7 @@ ketzerisch
 keuchend
 kinderlieb
 kindisch
+kindlich
 kitzlig
 klagend
 klamm
@@ -1950,22 +1971,30 @@ kühn
 kultiviert
 kümmerlich
 kunstlos
+kurz geraten
 kurzsichtig
 kurzweilig
 labbrig
+labrig
 lächelnd
 lachend
+lächerlich schön
 lähmend
 laienhaft
 lakonisch
 langarmig
+länglich
+langsam verblassend
 langstielig
 langwellig
 lapidar
+läppisch
 lärmend
 lau
 launenhaft
+launig
 launisch
+lauschig
 lausig
 lautlos
 lebendig
@@ -1975,9 +2004,11 @@ leicht bemerkbar
 leicht verständlich
 leichtfüßig
 leidend
+leidenschaftlos
 leidenschaftslos
 liebevoll
 lobend
+lose
 luftig
 lumpig
 lustig
@@ -1993,6 +2024,7 @@ malerisch
 manierlich
 mannhaft
 mannigfaltig
+märchenhaft
 marschierend
 martialisch
 maßlos
@@ -2008,8 +2040,10 @@ miserabel
 mitleidig
 mitteilsam
 mittelalterlich aussehend
+modig
 moorig
 morastig
+morsch
 muffig
 mulmig
 munter
@@ -2017,6 +2051,7 @@ mürbe
 mürrisch
 mutmaßend
 mysteriös
+nachdenkend
 nachdenklich
 nachgebend
 nackt
@@ -2042,6 +2077,7 @@ objektiv
 offenherzig
 oll
 onkelhaft
+päpstlich
 paradiesisch
 paradox
 pathologisch
@@ -2053,6 +2089,7 @@ penetrant
 penibel
 pfefferig
 pfeifend
+pfiffíg
 pflichtgetreu
 phlegmatisch
 phrasenhaft
@@ -2107,6 +2144,9 @@ respektlos
 respektvoll
 rieselnd
 robust
+rosa
+rosig
+rötlich
 routiniert
 rücksichtslos
 rücksichtsvoll
@@ -2121,6 +2161,7 @@ saftig
 sanft abfallend
 sanft abgestuft
 sanft gewellt
+sanftmütig
 saumäßig
 schadenfroh
 schal
@@ -2132,10 +2173,12 @@ scharf gespitzt
 scharfsinnig
 schattig
 schauderhaft
+schauerlich
 schaurig
 scheckig
 scherzhaft
 scheusslich
+schick
 schief
 schildernd
 schimmelig
@@ -2143,6 +2186,7 @@ schimmernd
 schlaff
 schlagfertig
 schlammig
+schlecht überlegt
 schleifend
 schloßartig
 schluchzend
@@ -2200,6 +2244,7 @@ sorgfältig gekleidet
 sozialdemokratisch
 spärlich
 spartanisch
+spaßig
 speckig
 spiegelnd
 spitz geschnitten
@@ -2255,6 +2300,7 @@ tollpatschig
 tragikomisch
 transzendental
 treibend
+triftig
 trivial
 tröstend
 trostlos
@@ -2395,6 +2441,7 @@ vergeblich
 vergesslich
 verhängnißvoll
 verhaßt
+verkappt
 verkehrt
 verletzlich
 verliebt
@@ -2440,10 +2487,12 @@ vorzeitig
 wach
 wackelig
 waghalsig
+wahllos
 wahnwitzig
 waldigt
 warnend
 wäßrig
+wehmüthig
 wehmütig
 weibisch
 weichherzig
