@@ -10,11 +10,19 @@ shuffle(adjectives)
 
 grammar = {
     'origin': [
-        '#es-ist# #viel# zu #adjektiv.Upper# und #zudem# #viel# zu #adjektiv#',
-        '#es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#',
-        '#es-ist# #zudem# #viel# zu #adjektiv#',
-        'Zu #adjektiv#, zu #adjektiv#, zu #adjektiv#',
+        '#es-ist# #viel# zu #adjektiv# #continue#',
+        '#zudem# #ist-es# #viel# zu #adjektiv# #continue#',
+        # '#es-ist# zu #adjektiv#, zu #adjektiv# und #zudem# zu #adjektiv#',
+        # '#es-ist# #zudem# #viel# zu #adjektiv#',
+        # 'Zu #adjektiv#, zu #adjektiv#, zu #adjektiv#',
     ],
+    'continue': {
+        'method': 'freq',
+        'rules': [
+            ['', 1],
+            ['und #zudem# #viel# zu #adjektiv#', 3]
+        ]
+    },
     'es-ist': {
         'method': 'freq',
         'rules': [
@@ -23,34 +31,48 @@ grammar = {
             ['ich finde es', 5]
         ]
     },
+    'ist-es': [
+        'ist es'
+    ],
     'viel': {
         'method': 'freq',
         'rules': [
-            ['viel', 2],
-            ['häufig', 2],
-            ['weitaus', 2],
-            ['wiederholt', 2],
-            ['generell', 2],
-            ['oft', 2],
-            ['sehr oft', 2],
-            ['manchmal', 2],
-            ['x-fach', 2],
-            ['immer wieder', 2],
-            ['etliche mal', 2],
-            ['enorm', 2],
             ['', 1],
+            ['viel', 3],
+            ['weitaus', 4],
+            ['enorm', 5],
+            ['x-fach', 7],
         ]
     },
     'zudem': [
         'im Allgemeinen',
+        'im Wesentlichen',
+        'in erster Linie',
+        'im Speziellen', 
+        # gemeinhin, gewöhnlich, im Regelfall, in der Regel, meist, meistens, normalerweise, zumeist
+        'von wenigen Ausnahmen abgesehen',
+        # wenn man spezielle Einzelfälle außer Acht lässt
         'weitgehend',
         'im Großen und Ganzen',
+        # insgesamt betrachtet, allgemein
         'darüber hinaus',
         'des Wei­te­ren',
         'ganz sicher',
         'auf jeden Fall',
         # 'jedenfalls',
-        'zudem'
+        'zudem',
+        # hinzu kommt ...
+        'außerdem',
+        # überdies, zudem, ferner, nebenher, nebenbei, des Weiteren, weiterführend, im Weiteren, in der weiteren Folge, darüber hinaus, auch, zusätzlich
+        'häufig',
+        'wiederholt',
+        'generell',
+        'oft',
+        'sehr oft',
+        'manchmal',
+        'immer wieder',
+        'etliche male',
+        
     ],
     'adjektiv': {
         'method': 'uniq',

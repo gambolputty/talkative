@@ -7,7 +7,7 @@ class Rule:
         self.index = index
         self.is_touched = False
         self.raw = ''
-        self.frequency = [1]
+        self.freq = [1]
         self.nodes = []
         
         # set text and frequency
@@ -27,7 +27,7 @@ class Rule:
                 raise ValueError(f'Rule text is not of type "string" (is {type(rule[0])})')
 
             self.raw = rule[0]
-            self.frequency = rule[1:]            
+            self.freq = rule[1:]            
         else:
             raise ValueError(f'Wrong rule format "{rule}"')
 

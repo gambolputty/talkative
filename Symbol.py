@@ -1,6 +1,7 @@
 from pdb import set_trace as bp
 from pprint import pprint
 import random
+from History import History
 from Rule import Rule
 
 
@@ -13,7 +14,8 @@ class Symbol:
         freq:
             Select a rule whose frequency value is divisible by the number
             of all previous occurrences of the rule inside the "history".
-            Prefer rule with hightest freq. value.
+            Prefer rule with hightest freqency value. If multiple rules of
+            that rule are found, select random one.
 
         uniq:
             Force the selection of unique rules (rules not in "history" yet).
@@ -34,7 +36,7 @@ class Symbol:
         self.method = 'rand'
         self.rand_balanced = True
         self.rules = []
-        self.history = []
+        self.history = None
 
         # check options
         # options can be a list (of rules) or a dict (with options and rules)
@@ -50,6 +52,9 @@ class Symbol:
 
         # init rules
         self.rules = [Rule(i, r) for i, r in enumerate(options['rules'])]
+
+        # init history
+        self.history = History(len(self.rules))
 
 
     def parse_options(self, options):
@@ -82,32 +87,20 @@ class Symbol:
             found_rule = self.select_rule_uniq()
             
         # add to history
-        self.history.append(found_rule.index)
+        self.history.add(found_rule.index)
 
         # return
         return found_rule
 
 
     def select_rule_random(self):
-        rules_count = len(self.rules)
-        history_size = len(self.history)
-        indexes_to_exlude = []
-        if history_size > 0:
-            if rules_count <= 2:
-                indexes_to_exlude = self.history[-1]
-            else:
-                if history_size < rules_count:
-                    indexes_to_exlude = self.history
-                else:
-                    # calculate 80% percent of the total number of rules
-                    # exclude these last 80% for the next selection
-                    ignore_from = int(round((80 * rules_count) / 100.0))
-                    indexes_to_exlude = self.history[-ignore_from:]
-
-        # filter rules
-        rule_candidates = self.rules
+        # get indexes to exclude for next selection
+        indexes_to_exlude = self.history.recently_used_steps
         if indexes_to_exlude:
+            # filter rules
             rule_candidates = [r for r in self.rules if r.index not in indexes_to_exlude]
+        else:
+            rule_candidates = self.rules
 
         return random.choice(rule_candidates)
 
@@ -117,24 +110,35 @@ class Symbol:
         # n % k == 0
         # evaluates true if n is an exact multiple of k
         # https://stackoverflow.com/a/8002234/5732518
-        next_step = len(self.history) + 1
-        rules_filtered = [r for r in self.rules if any(next_step % divider == 0 for divider in r.frequency)]
+        next_step = len(self.history.steps) + 1
+        rules_filtered = [r for r in self.rules if any(next_step % divider == 0 for divider in r.freq)]
 
-        # sort
-        # hightest divider at the top
-        rules_sorted = sorted(rules_filtered, key=lambda x: x.frequency, reverse=True)
-
+        # sort (hightest freq. value at the top)
+        rules_sorted = sorted(rules_filtered, key=lambda x: x.freq, reverse=True)
         if not rules_sorted:
-            raise ValueError(f'No rule found for frequency "{next_step}" in "{self.key}"')
+            raise ValueError(f'No rule found for step "{next_step}" in "{self.key}"')
 
-        # select first rule (with highest divider)
-        return rules_sorted[0]
+        # get first rule (with highest freq. value)
+        wanted_rule = rules_sorted[0]
 
+        # check if there are multiple rules with same frequency value
+        # select random rule from there
+        same_freq_rules = [r for r in rules_sorted if r != wanted_rule and \
+            all(f in wanted_rule.freq for f in r.freq)]
+        if same_freq_rules:
+            indexes_to_exlude = self.history.recently_used_steps
+            rule_candidates = [r for r in same_freq_rules if r.index not in indexes_to_exlude]
+            # if all rules with same freq. used recently, select randomly from all rules
+            if not rule_candidates:
+                rule_candidates = same_freq_rules
+            return random.choice(rule_candidates)            
+
+        return wanted_rule
 
     def select_rule_uniq(self):
         # find next unique rule
         for rule in self.rules:
-            if rule.index not in self.history:
+            if rule.index not in self.history.steps:
                 return rule
         else:
             raise ValueError(f'No unique rule found in "{self.key}" (all used)')
