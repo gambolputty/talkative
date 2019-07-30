@@ -1,6 +1,6 @@
 from collections import defaultdict
 from copy import deepcopy
-from Symbol import Symbol
+from talkative.Symbol import Symbol
 
 
 class Story:

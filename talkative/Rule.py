@@ -1,5 +1,5 @@
 import re
-from Node import Node
+from talkative.Node import Node
 
 
 class Rule:

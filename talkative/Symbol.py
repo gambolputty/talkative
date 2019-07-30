@@ -1,8 +1,8 @@
 from pdb import set_trace as bp
 from pprint import pprint
 import random
-from History import History
-from Rule import Rule
+from talkative.History import History
+from talkative.Rule import Rule
 
 
 class Symbol:
