@@ -17,7 +17,7 @@ class Rule:
             rule_size = len(rule)
             if rule_size == 0:
                 raise ValueError(f'Empty rule found')
-
+            
             # check if rule has valid frequency dividers from 1 - X
             if not all(isinstance(d, int) and d >= 1 for d in rule[1:]):
                 raise ValueError(f'Rule with invalid divider (must be a number > 1): {rule}')
@@ -25,6 +25,10 @@ class Rule:
             # check rule text type
             if not isinstance(rule[0], str):
                 raise ValueError(f'Rule text is not of type "string" (is {type(rule[0])})')
+
+            # add default freq value if none provided
+            if rule_size == 1:
+                rule.append(1)
 
             self.raw = rule[0]
             self.freq = rule[1:]            

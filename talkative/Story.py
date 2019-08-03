@@ -19,6 +19,8 @@ class Story:
 
 
     def build_state(self, key):
+        if key not in self.symbols:
+            raise KeyError(f'"#{key}#" not found in grammar')
         # pick rule, copy instance
         rule = deepcopy(self.symbols[key].select_rule())
 
