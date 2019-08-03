@@ -34,10 +34,7 @@ class Story:
 
     def generate_text(self):
         origin_rule = self.state[self.origin][0]
-        flattened = origin_rule.flatten(self.state)
-
-        # join text chunks
-        text = ''.join(flattened)
+        text = origin_rule.flatten(self.state)
 
         # remove duplicate spaces
         text = ' '.join(text.split())

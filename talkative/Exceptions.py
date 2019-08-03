@@ -1,0 +1,2 @@
+class UniqueError(Exception):
+    pass

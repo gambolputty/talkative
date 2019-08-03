@@ -1,6 +1,7 @@
 from pdb import set_trace as bp
 from pprint import pprint
 import random
+from talkative.Exceptions import UniqueError
 from talkative.History import History
 from talkative.Rule import Rule
 
@@ -145,4 +146,4 @@ class Symbol:
             if rule.index not in self.history.steps:
                 return rule
         else:
-            raise ValueError(f'No unique rule found in "{self.key}" (all used)')
+            raise UniqueError(f'No unique rule found in "{self.key}" (all used)')

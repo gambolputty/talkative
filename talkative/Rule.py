@@ -1,4 +1,5 @@
 import re
+from talkative.modifiers import base as modifiers
 from talkative.Node import Node
 
 
@@ -55,7 +56,25 @@ class Rule:
             elif match.group('tag'):
                 node = Node(type=1, text=match.group('tag'))
                 if match.group('mod'):
-                    node.mod = match.group('mod').split('.')
+                    # parse modifiers
+                    found_mods = []
+                    for mod in match.group('mod').split('.'):
+                        mod_parsed = re.match(r'(?P<name>[^(]+)(?:\((?P<params>[^)]+)\))?', mod)
+                        mod_name = mod_parsed.group('name')
+
+                        # check if exists in modifiers
+                        if mod_name is None or mod_name not in modifiers:
+                            raise ValueError(f'One or more modifiers not found in {mod_name}')
+
+                        # parse params
+                        mod_params = []
+                        if mod_parsed.group('params') is not None:
+                            mod_params = [p.strip('"\'') for p in re.split(r', ?', mod_parsed.group('params'))]
+
+                        # save modifier
+                        found_mods.append({'name': mod_name, 'params': mod_params})
+
+                    node.mod = found_mods
             if node is None:
                 raise ValueError(f'Something is wrong with the nodes found in rule {self.raw}')
 
@@ -78,7 +97,14 @@ class Rule:
                 if rule is False:
                     raise ValueError(f'No next rule found in state for node "{node.text}", type {node.type}')
 
-                # expand rule
-                text_list.extend(rule.flatten(state))
+                # apply modifiers
+                # skip empty strings
+                flattened_rule = rule.flatten(state)
+                if flattened_rule != '' and node.mod is not None:
+                    for mod in node.mod:
+                        flattened_rule = modifiers[mod['name']](flattened_rule, *mod['params'])
 
-        return text_list
+                # append
+                text_list.append(flattened_rule)
+
+        return ''.join(text_list)
