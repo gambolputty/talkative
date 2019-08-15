@@ -1,7 +1,7 @@
 from pdb import set_trace as bp
 from pprint import pprint
 import random
-from talkative.Exceptions import UniqueError
+from talkative.Exceptions import NoRulesError
 from talkative.History import History
 from talkative.Rule import Rule
 
@@ -63,64 +63,69 @@ class Symbol:
         if options_type == 'dict':
             if 'rules' not in options:
                 raise ValueError(f'No "rules"-key found in "{self.key}"')
-            if 'rules' in options and not options['rules']:
-                raise ValueError(f'Empty rules-key in "{self.key}"')
+            # if 'rules' in options and not options['rules']:
+            #     raise ValueError(f'Empty rules-key in "{self.key}"')
             if 'rand_balanced' in options and not isinstance(options['rand_balanced'], bool):
                 raise ValueError(f'Option "rand_balanced" is not of type Boolean in "{self.key}"')
             if 'method' in options and options['method'] not in ['rand', 'freq', 'uniq']:
                 raise ValueError(f'Invalid method in "{self.key}" (expected "rand", "uniq" or "freq")')
             return options
         elif options_type == 'list':
-            if not options:
-                raise ValueError(f'Empty rules-key in "{self.key}"')
+            # if not options:
+            #     raise ValueError(f'Empty rules-key in "{self.key}"')
             return { 'rules': options }
         else:
             raise ValueError(f'"{self.key}" is of invalid type (must be "list" or "dict"')
 
 
-    def select_rule(self):
+    def select_rule(self, ignored_indexes=set()):
         found_rule = None
-        if self.method == 'rand':
-            found_rule = self.select_rule_random()
-        elif self.method == 'freq':
-            found_rule = self.select_rule_freq()
-        elif self.method == 'uniq':
-            found_rule = self.select_rule_uniq()
-            
-        # add to history
-        self.history.add(found_rule.index)
+        rules = [r for r in self.rules if r.index not in ignored_indexes]
 
+        if not rules:
+            raise NoRulesError()
+
+        if self.method == 'rand':
+            found_rule = self.select_rule_random(rules)
+        elif self.method == 'freq':
+            found_rule = self.select_rule_freq(rules)
+        elif self.method == 'uniq':
+            found_rule = self.select_rule_uniq(rules)
+            
         # return
         return found_rule
 
 
-    def select_rule_random(self):
-        if len(self.rules) == 1:
-            return self.rules[0]
+    def select_rule_random(self, rules):
+        if len(rules) == 1:
+            return rules[0]
         
         # get indexes to exclude for next selection
         indexes_to_exlude = self.history.recently_used_steps
         if indexes_to_exlude:
             # filter rules
-            rule_candidates = [r for r in self.rules if r.index not in indexes_to_exlude]
+            rule_candidates = [r for r in rules if r.index not in indexes_to_exlude]
         else:
-            rule_candidates = self.rules
+            rule_candidates = rules
+        
+        if not rule_candidates:
+            raise NoRulesError()
 
         return random.choice(rule_candidates)
 
 
-    def select_rule_freq(self):
+    def select_rule_freq(self, rules):
         # filter rules
         # n % k == 0
         # evaluates true if n is an exact multiple of k
         # https://stackoverflow.com/a/8002234/5732518
         next_step = len(self.history.steps) + 1
-        rules_filtered = [r for r in self.rules if any(next_step % divider == 0 for divider in r.freq)]
+        rules_filtered = [r for r in rules if any(next_step % divider == 0 for divider in r.freq)]
 
         # sort (hightest freq. value at the top)
         rules_sorted = sorted(rules_filtered, key=lambda x: x.freq, reverse=True)
         if not rules_sorted:
-            raise ValueError(f'No rule found for step "{next_step}" in "{self.key}"')
+            raise NoRulesError(f'No rule found for step "{next_step}" in "{self.key}"')
 
         # get first rule (with highest freq. value)
         wanted_rule = rules_sorted[0]
@@ -140,10 +145,10 @@ class Symbol:
         return wanted_rule
 
 
-    def select_rule_uniq(self):
+    def select_rule_uniq(self, rules):
         # find next unique rule
-        for rule in self.rules:
+        for rule in rules:
             if rule.index not in self.history.steps:
                 return rule
         else:
-            raise UniqueError(f'No unique rule found in "{self.key}" (all used)')
+            raise NoRulesError(f'No unique rule found in "{self.key}" (all used)')

@@ -11,6 +11,9 @@ class History:
         self.steps.append(index)
 
 
+    def undo(self):
+        del self.steps[-1]
+
     @property
     def recently_used_steps(self):
         """
