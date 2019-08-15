@@ -39,7 +39,7 @@ class Story:
                 for node in [n for n in rule.nodes if n.type == 1]:
                     saved_keys.append(self.build_state(node.text))
             except NoRulesError:
-                # undo every step taken in 
+                # undo: remove every saved key in current or recursive iteration
                 # --> remove symbol key from state and revert symbol history
                 if saved_keys:
                     [self.undo(k) for k in saved_keys]
