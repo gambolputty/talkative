@@ -19,4 +19,5 @@ def choice(text, *params):
 base = {
     'capitalize': capitalize,
     'replace': replace
+    'choice': choice
 }
