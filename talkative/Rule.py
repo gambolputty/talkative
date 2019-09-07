@@ -64,7 +64,7 @@ class Rule:
 
                         # check if exists in modifiers
                         if mod_name is None or mod_name not in modifiers:
-                            raise ValueError(f'One or more modifiers not found in {mod_name}')
+                            raise ValueError(f'One or more modifiers not found: "{mod_name}"')
 
                         # parse modifier params
                         mod_params = []
