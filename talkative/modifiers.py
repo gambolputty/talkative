@@ -10,7 +10,7 @@ def replace(text, *params):
 
 def choice(text, *params):
     choices = [x for x in text.split('|')]
-    index = params[0] - 1
+    index = int(params[0]) - 1
     try:
         return choices[index]
     except KeyError:

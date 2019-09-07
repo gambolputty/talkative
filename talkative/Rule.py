@@ -66,7 +66,7 @@ class Rule:
                         if mod_name is None or mod_name not in modifiers:
                             raise ValueError(f'One or more modifiers not found in {mod_name}')
 
-                        # parse params
+                        # parse modifier params
                         mod_params = []
                         if mod_parsed.group('params') is not None:
                             mod_params = [p.strip('"\'') for p in re.split(r', ?', mod_parsed.group('params'))]
