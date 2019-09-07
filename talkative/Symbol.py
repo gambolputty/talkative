@@ -75,7 +75,7 @@ class Symbol:
             #     raise ValueError(f'Empty rules-key in "{self.key}"')
             return { 'rules': options }
         else:
-            raise ValueError(f'"{self.key}" is of invalid type (must be "list" or "dict"')
+            raise ValueError(f'"{self.key}" is of invalid type (must be "list" or "dict")')
 
 
     def select_rule(self, ignored_indexes=set()):

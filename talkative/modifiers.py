@@ -7,6 +7,12 @@ def capitalize(text, *params):
 def replace(text, *params):
     return text.replace(params[0], params[1])
 
+
+def choice(text, *params):
+    choices = [x for x in text.split('|')]
+    index = params[0] - 1
+    return choices[index]
+
 base = {
     'capitalize': capitalize,
     'replace': replace
