@@ -11,7 +11,10 @@ def replace(text, *params):
 def choice(text, *params):
     choices = [x for x in text.split('|')]
     index = params[0] - 1
-    return choices[index]
+    try:
+        return choices[index]
+    except KeyError:
+        return choices[0]
 
 base = {
     'capitalize': capitalize,
