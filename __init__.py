@@ -1,1 +1,1 @@
-from talkative import Exception, History, Node, Rule, Story, Symbol, modifiers
+from talkative import Exceptions, History, Node, Rule, Story, Symbol, modifiers
