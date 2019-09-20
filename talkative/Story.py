@@ -19,7 +19,9 @@ class Story:
         self.generate_text()
 
 
-    def build_state(self, key):
+    def build_state(self, key=None):
+        if key is None:
+            key = self.origin
         if key not in self.symbols:
             raise NoRulesError(f'"#{key}#" not found in grammar')
 
